@@ -17,7 +17,7 @@ from setuptools import setup
 setup(
     name='mir.cp',
     version='0.1.0',
-    description='Distribution template for the mir namespace',
+    description='Cached property implementation',
     long_description='',
     keywords='',
     url='https://github.com/darkfeline/mir.cp',

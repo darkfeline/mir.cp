@@ -14,4 +14,4 @@ mir.cp README
    :target: http://mir-cp.readthedocs.io/en/latest/
    :alt: Latest Documentation
 
-Template project for Python projects under Project Mir.
+Cached property implementations.
