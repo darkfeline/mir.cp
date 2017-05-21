@@ -15,12 +15,12 @@
 from setuptools import setup
 
 setup(
-    name='mir.protology',
+    name='mir.cp',
     version='0.1.0',
     description='Distribution template for the mir namespace',
     long_description='',
     keywords='',
-    url='https://github.com/darkfeline/mir.protology',
+    url='https://github.com/darkfeline/mir.cp',
     author='Allen Li',
     author_email='darkfeline@felesatra.moe',
     classifiers=[
@@ -31,6 +31,6 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
 
-    packages=['mir.protology'],
+    packages=['mir.cp'],
     install_requires=[],
 )

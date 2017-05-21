@@ -12,25 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import contextlib
-import io
+from mir.cp import ahiru
 
-from mir.protology import ahiru
-
-
-def test_quack():
-    assert ahiru.quack() == 'quack'
-
-
-def test_main():
-    output = io.StringIO()
-    with contextlib.redirect_stdout(output):
-        ahiru.main()
-    assert output.getvalue() == 'quack\n'
-
-
-def test_main_with_args():
-    output = io.StringIO()
-    with contextlib.redirect_stdout(output):
-        ahiru.main([])
-    assert output.getvalue() == 'quack\n'
+ahiru.main()
