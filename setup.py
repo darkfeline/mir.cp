@@ -16,7 +16,7 @@ from setuptools import setup
 
 setup(
     name='mir.cp',
-    version='0.1.0',
+    version='1.0.0',
     description='Cached property implementation',
     long_description='',
     keywords='',

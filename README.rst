@@ -15,3 +15,5 @@ mir.cp README
    :alt: Latest Documentation
 
 Cached property implementations.
+
+Look at the code and tests for SemVer public API.
