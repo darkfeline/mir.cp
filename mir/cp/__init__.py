@@ -75,12 +75,9 @@ class WeakRefCachedProperty:
     def __get__(self, instance, owner):
         if instance is None:
             return self
-        try:
-            return self.cache[instance]
-        except KeyError:
-            value = self.fget(instance)
-            self.cache[instance] = value
-            return value
+        if instance not in self.cache:
+            self.cache[instance] = self.fget(instance)
+        return self.cache[instance]
 
     def __set__(self, instance, value):
         raise AttributeError('Cannot set value of cached property')
