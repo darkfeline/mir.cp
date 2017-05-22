@@ -12,12 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pytest
+
 import mir.cp
-
-
-def _make_test_class(descriptor):
-    """Make an instance using the given cached property implementation."""
-    return type('TestClass', (), {'foo': descriptor})
 
 
 def _count():
@@ -30,8 +27,13 @@ def _count():
     return count_func
 
 
-def test_nondata():
-    impl = mir.cp.NonDataCachedProperty(fget=_count(), name='foo')
+@pytest.mark.parametrize('impl_class,args,kwargs', [
+    (mir.cp.NonDataCachedProperty, (), dict(fget=_count(), name='foo')),
+    (mir.cp.WeakRefCachedProperty, (), dict(fget=_count())),
+])
+def test_impl(impl_class, args, kwargs):
+    """Test a cached property implementation for basic behavior."""
+    impl = impl_class(*args, **kwargs)
     instance = _make_test_class(impl)()
     assert instance.foo == 1
     assert instance.foo == 1
@@ -39,10 +41,14 @@ def test_nondata():
     assert instance.foo == 2
 
 
-def test_nondata_access_on_class():
-    impl = mir.cp.NonDataCachedProperty(fget=_count(), name='foo')
+@pytest.mark.parametrize('impl_class,args,kwargs', [
+    (mir.cp.NonDataCachedProperty, (), dict(fget=_count(), name='foo')),
+    (mir.cp.WeakRefCachedProperty, (), dict(fget=_count())),
+])
+def test_class_access(impl_class, args, kwargs):
+    impl = impl_class(*args, **kwargs)
     cls = _make_test_class(impl)
-    assert isinstance(cls.foo, mir.cp.NonDataCachedProperty)
+    assert cls.foo is impl
 
 
 def test_nondata_default_name():
@@ -54,3 +60,8 @@ def test_nondata_default_name():
     assert instance.foo == 1
     del instance.foo
     assert instance.foo == 2
+
+
+def _make_test_class(descriptor):
+    """Make an instance using the given cached property implementation."""
+    return type('TestClass', (), {'foo': descriptor})

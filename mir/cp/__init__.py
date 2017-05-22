@@ -16,6 +16,8 @@
 
 __version__ = '0.1.0'
 
+import weakref
+
 
 class NonDataCachedProperty:
 
@@ -45,3 +47,46 @@ class NonDataCachedProperty:
         value = self.fget(instance)
         setattr(instance, self.name, value)
         return value
+
+
+class WeakRefCachedProperty:
+
+    """Cached property implemented with a weakref dictionary.
+
+    The value is cached on the descriptor instance using the instance
+    whose attribute was accessed as the key.
+
+    The cache can be cleared by deleting the attribute name on the
+    instance.
+
+    Instances of the owning class must be hashable.
+
+    `fget` is a function for getting the attribute value.
+
+    The arguments are also exposed as instance attributes with the same
+    name as the parameters.  The cache is accessible via the `cache`
+    attribute.
+    """
+
+    def __init__(self, fget):
+        self.fget = fget
+        self.cache = weakref.WeakKeyDictionary()
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        try:
+            return self.cache[instance]
+        except KeyError:
+            value = self.fget(instance)
+            self.cache[instance] = value
+            return value
+
+    def __set__(self, instance, value):
+        raise AttributeError('Cannot set value of cached property')
+
+    def __delete__(self, instance):
+        try:
+            del self.cache[instance]
+        except KeyError as e:
+            raise AttributeError('Value is not cached') from e
