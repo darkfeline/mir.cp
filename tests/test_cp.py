@@ -62,6 +62,20 @@ def test_nondata_default_name():
     assert instance.foo == 2
 
 
+def test_weakref_set():
+    impl = mir.cp.WeakRefCachedProperty(fget=_count())
+    instance = _make_test_class(impl)()
+    with pytest.raises(AttributeError):
+        instance.foo = 1
+
+
+def test_weakref_delete_noncached():
+    impl = mir.cp.WeakRefCachedProperty(fget=_count())
+    instance = _make_test_class(impl)()
+    with pytest.raises(AttributeError):
+        del instance.foo
+
+
 def _make_test_class(descriptor):
     """Make an instance using the given cached property implementation."""
     return type('TestClass', (), {'foo': descriptor})
